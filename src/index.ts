@@ -15,31 +15,31 @@ import {RealtimeSubscription} from '@supabase/realtime-js';
 import {Logger} from '@open-mail-archive/logger';
 
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Initializing helpers.',
 });
 RealtimeHelper.client.connect();
 await RabbitMqHelper.init();
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Helpers initialized.',
 });
 
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Creating the realtime subscription channel.',
 });
 const channel = RealtimeHelper.client.channel(
   ImapAccountChannel,
 ) as RealtimeSubscription;
 Logger.Instance.debug({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Realtime channel created.',
   data: channel,
 });
 
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Attaching hooks to channel.',
 });
 channel.on('*', async (payload: GenericPayload) => {
@@ -64,12 +64,12 @@ channel.on('*', async (payload: GenericPayload) => {
   );
 });
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Hooks attached',
 });
 
 Logger.Instance.info({
-  trace: 'ImapAccountsWorker',
+  trace: 'ImapAccountsScheduler',
   message: 'Subscribing for events...',
 });
 channel.subscribe();
