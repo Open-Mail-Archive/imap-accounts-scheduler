@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import {RabbitMqHelper} from '@open-mail-archive/rabbitmq-helper';
+import {JobData, RabbitMqHelper} from '@open-mail-archive/rabbitmq-helper';
 import {
   GenericPayload,
   DeletePayload,
@@ -10,7 +10,6 @@ import {
   ImapAccountChannel,
   ImapAccountPayload,
   ImapAccountQueue,
-  ImapAccountQueueJobData,
 } from '@open-mail-archive/types';
 import {RealtimeSubscription} from '@supabase/realtime-js';
 
@@ -39,9 +38,7 @@ channel.on('*', async (payload: GenericPayload) => {
 
   await RabbitMqHelper.send(
     ImapAccountQueue,
-    new ImapAccountQueueJobData(payload.type, {
-      imap_account: messagePayload,
-    }).toJson(),
+    new JobData<ImapAccountPayload>(payload.type, messagePayload).toJson(),
   );
 });
 
